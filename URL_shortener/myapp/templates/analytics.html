@@ -1,0 +1,323 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Custom URL Shortener - Analytics</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" type="text/css" media="screen">
+    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" media="screen">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+
+    <style>
+        /* Custom CSS for analytics page */
+        body {
+            /* Ensure smooth transition for background and text color */
+            background-color: mintcream;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #212529; /* Default text color for light mode */
+        }
+        body.dark-mode {
+            background-color: #212529; /* Dark background for the body */
+            color: #f8f9fa; /* Light text color for dark mode */
+        }
+
+        .analytics-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode .analytics-card {
+            background-color: #343a40;
+            border-color: #444;
+            color: #f8f9fa;
+        }
+
+        .analytics-card h5, .analytics-card p, .analytics-card h4 {
+            color: inherit; /* Ensure text color changes with dark mode */
+        }
+
+        /* Styling for the long URL within the card to prevent overflow */
+        .analytics-card .long-url-display {
+            word-wrap: break-word; /* Older browsers */
+            word-break: break-all; /* Breaks words at any character if necessary */
+            white-space: normal; /* Ensures text wraps */
+            font-weight: bold; /* Keep it bold as before */
+            margin-bottom: 10px; /* Add some space below it */
+        }
+
+        .short-url-blue {
+            color: #007bff !important;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .short-url-blue:hover {
+            text-decoration: underline;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .chart-item {
+            flex: 1;
+            min-width: 300px;
+            max-width: 45%;
+            margin: 10px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode .chart-item {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+        .chart-item h4 {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-item {
+                max-width: 90%;
+            }
+        }
+
+        /* --- Button Styling for Analytics Page --- */
+        /* Common styles for all buttons in the header for smooth transition */
+        .butt_on a, .butt_on button {
+            transition: all 0.3s ease;
+            margin-left: 5px; /* Add some spacing between buttons */
+            margin-right: 5px;
+        }
+
+        /* Styles for 'Shorten New URL' and 'All Analytics' buttons */
+        .btn_m_l {
+            /* Default/Light Mode */
+            color: #007bff; /* Blue text */
+            background-color: #e9ecef; /* Light gray background */
+            border: 1px solid #007bff; /* Blue border */
+            padding: .375rem .75rem; /* Standard Bootstrap button padding */
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem; /* Standard Bootstrap button border-radius */
+            display: inline-block; /* Ensure it behaves like a block for padding/margin */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .btn_m_l:hover {
+            color: #fff; /* White text on hover */
+            background-color: #007bff; /* Blue background on hover */
+            text-decoration: none; /* Keep underline removed */
+        }
+
+        /* Dark mode styles for 'Shorten New URL' and 'All Analytics' buttons */
+        body.dark-mode .btn_m_l {
+            color: #f8f9fa; /* Light text in dark mode */
+            background-color: #495057; /* Darker gray background */
+            border-color: #6c757d; /* Slightly lighter border for contrast */
+        }
+
+        body.dark-mode .btn_m_l:hover {
+            background-color: #6c757d; /* Even darker on hover */
+            border-color: #495057;
+        }
+
+        /* Dark Mode Toggle button (already provided, adding here for completeness) */
+        #darkModeToggle {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        body.light-mode #darkModeToggle {
+            color: #343a40;
+            background-color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        body.dark-mode #darkModeToggle {
+            color: #f8f9fa;
+            background-color: #343a40;
+            border-color: #444;
+        }
+
+        #darkModeToggle:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body class="pace-done lout_stats30">
+    <main id="content" role="main" class="wyniki wyniki_all">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 page_log_in mt-0">
+                    <h2 class="h1 text-center">Link Analytics</h2>
+                    <div class="butt_on mx-auto text-center mt-3">
+                        <a href="/" class="btn_m_l">Shorten New URL</a>
+                        <a href="/all-analytics" class="btn_m_l">All Analytics</a>
+                        <button id="darkModeToggle" class="btn btn-secondary btn-sm">Toggle Dark Mode</button>
+                    </div>
+                </div>
+
+                {# Moved analytics data to a card in the middle #}
+                {# It's good practice to ensure `cols` is always an iterable, even if empty #}
+                {% if cols %}
+                    {% for obj in cols %}
+                    <div class="col-12 d-flex justify-content-center mt-4">
+                        <div class="analytics-card col-md-8 col-lg-6">
+                            <h6><Strong>Analytics for:</Strong> <a href="{{ obj.long_url }}" target="_blank" class="long-url-display">{{ obj.long_url }}</a></h6>
+                            <p id="link" class="link_element" style="font-weight: bold;">
+                                Short URL: <a href="/{{ obj.short_url }}" class="short-url-blue" target="_blank">{{ obj.short_url }}</a>
+                            </p>
+                            <p><strong>Total Clicks:</strong> {{ obj.clicks }}</p>
+                            <p><strong>Created On:</strong> {{ obj.date }}</p>
+                            <p><strong>Last Accessed:</strong> {{ obj.last_accessed|default:"N/A" }}</p>
+                            <hr>
+
+                            <h4>Latest Click Data:</h4>
+                            <p><strong>User Agent:</strong> {{ obj.user_agent|default:"N/A" }}</p>
+                            <p><strong>Referrer:</strong> {{ obj.referrer|default:"N/A" }}</p>
+                            <p><strong>IP Address:</strong> {{ obj.ip_address|default:"N/A" }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 text-center mt-4">
+                        <p>No analytics data available for this URL.</p>
+                    </div>
+                {% endif %}
+
+
+                {# Charts are now in a new row at the bottom, side-by-side #}
+                <div class="col-12 chart-container">
+                    <div class="chart-item">
+                        <h4>Clicks by Country</h4><br/><br/><br/><br/><br/><br/>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                    <div class="chart-item">
+                        <h4>Device Breakdown</h4>
+                        <canvas id="donutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="text/javascript">
+        // Dark Mode Toggle Logic (Duplicate for analytics page)
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Check for saved dark mode preference
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            body.classList.add(currentTheme);
+        } else {
+            // Default to light mode if no preference is saved
+            body.classList.add('light-mode');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light-mode');
+            }
+        });
+
+        // Chart.js data (using example data from views.py)
+        const ctx = document.getElementById('barChart').getContext('2d');
+        const countries = {{ countries | safe}};
+        const number_of_clicks = {{ number_of_clicks | safe}}; 
+
+        const barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: countries,
+                datasets: [{
+                    label: 'Clicks by Country',
+                    data: number_of_clicks,
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                    ],
+                    borderColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+
+        const desktop_count = {{ desktop | safe }}; 
+        const mobile_count = {{ mobile | safe }};
+        const ctx2 = document.getElementById('donutChart').getContext('2d');
+        const donutChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Desktop',
+                    'Mobile'
+                ],
+                datasets: [{
+                    label: 'Device Clicks',
+                    data: [desktop_count, mobile_count],
+                    backgroundColor: [
+                        'rgb(54, 162, 235)', // Blue
+                        'rgb(255, 205, 86)'  // Yellow
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

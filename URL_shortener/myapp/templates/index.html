@@ -1,0 +1,173 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Custom URL Shortener</title>
+
+	<link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" type="text/css" media="screen">
+	<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" media="screen">
+</head>
+
+<body class="pace-done is_index_lout">
+	<main id="content" role="main">
+		<section class="container-fluid mx-0 bg_cuttly_main_092021">
+			<div class="header__bg"></div>
+			<div class="mb-0">
+				<div class="container position-relative">
+					<div class="row">
+						<div class="dv_main col-md-6 cutt_main_b2">
+							<h2 class="h1">URL Shortener</h2>
+							<h3 class="h2 h2_index text-left text-white">All the features you need in one place. <br />
+								Shorten, manage and track your links the easy way.</h3>
+							<div class="butt_on mx-auto">
+								<a href="#shorten" class="btn_m_l btn_m_l_1">Shorten</a>
+								<a href="/all-analytics" class="btn_m_l">All Analytics</a>
+							</div>
+						</div>
+						<div class="col-md-6 d-flex justify-content-end align-items-start mt-3">
+							<button id="darkModeToggle" class="btn btn-secondary btn-sm">Toggle Dark Mode</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="container shorten_block" id="shorten">
+			<div class="row">
+				<div class="col-12 page_log_in">
+					<h2 class="h1">Shorten your URL here!</h2>
+				</div>
+				<div class="col-lg-8 mx-auto">
+					<form method="POST">
+						{% csrf_token %}
+						<div class="form-group">
+							<input type="url" name="longurl" id="longurl" class="form-control" placeholder="Enter your long URL here" required>
+						</div>
+						<div class="form-group">
+							<input type="text" name="custom_name" id="custom_name" class="form-control" placeholder="Enter custom name (optional)">
+						</div>
+						<div class="form-group text-center">
+							<button type="submit" class="btn btn-primary btn-shorten">Shorten URL</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			{% if submitted %}
+			<div class="row mt-4 link-result-box">
+				<div class="col-lg-8 mx-auto">
+					<div class="alert alert-success d-flex align-items-center justify-content-between">
+						<div>
+							Your shortened URL: <a href="{{  full_short_url_display }}" target="_blank" id="link">{{ short_url }}</a>
+						</div>
+						<button class="btn btn-outline-success btn-sm copy-btn" onclick="copyToClipboard()">Copy</button>
+					</div>
+					<div class="link-stats-info">
+						<p>Original URL: {{ long_url }}</p>
+						<p>Created On: {{ date }}</p>
+						<p>Total Clicks: {{ clicks }}</p>
+						{# Corrected: Use short_url for analytics link as custom_name might be empty #}
+						<p><a href="/analytics/{{ short_url }}" class="btn btn-info btn-sm mt-2">View Analytics</a></p>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
+			{% if error %}
+			<div class="row mt-4">
+				<div class="col-lg-8 mx-auto">
+					<div class="alert alert-danger">
+						<strong>Error!</strong> {{ error_message|default:"Something went wrong. Please try again or use a different custom name." }}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
+			<div class="container" id="alert-box" style="display: none">
+				<div class="row py-4">
+					<div class="col-9"></div>
+					<div class="col-3">
+						<div class="alert alert-success">
+							<strong>Copied to clipboard!</strong>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<footer class="footer-area footer--light">
+			<div class="mini-footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="copyright-text">
+								<p><a href="https://www.o1codingclub.in/">O(1) Coding Club</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
+	</main>
+
+	<script type="text/javascript">
+		function copyToClipboard() {
+			const element = document.getElementById("link");
+			const el = document.createElement('textarea');
+			el.value = element.innerText;
+			el.setAttribute('readonly', '');
+			el.style.position = 'absolute';
+			el.style.left = '-9999px';
+			document.body.appendChild(el);
+			const selected =
+				document.getSelection().rangeCount > 0 ?
+				document.getSelection().getRangeAt(0) :
+				false;
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+			if (selected) {
+				document.getSelection().removeAllRanges();
+				document.getSelection().addRange(selected);
+			}
+
+			// Show alert
+			const alertBox = document.getElementById("alert-box");
+			alertBox.style.display = "block";
+			setTimeout(() => {
+				alertBox.style.display = "none";
+			}, 2000); // Hide after 2 seconds
+		}
+
+		// Dark Mode Toggle Logic
+		const darkModeToggle = document.getElementById('darkModeToggle');
+		const body = document.body;
+
+		// Check for saved dark mode preference
+		const currentTheme = localStorage.getItem('theme');
+		if (currentTheme) {
+			body.classList.add(currentTheme);
+		} else {
+			// Default to light mode if no preference is saved
+			body.classList.add('light-mode');
+		}
+
+		darkModeToggle.addEventListener('click', () => {
+			if (body.classList.contains('light-mode')) {
+				body.classList.remove('light-mode');
+				body.classList.add('dark-mode');
+				localStorage.setItem('theme', 'dark-mode');
+			} else {
+				body.classList.remove('dark-mode');
+				body.classList.add('light-mode');
+				localStorage.setItem('theme', 'light-mode');
+			}
+		});
+	</script>
+</body>
+
+</html>

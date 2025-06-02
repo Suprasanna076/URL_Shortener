@@ -1,0 +1,190 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Custom URL Shortener - All Analytics</title>
+
+	<link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" type="text/css" media="screen">
+	<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" media="screen">
+
+	<style type="text/css">
+		 body {
+            /* Ensure smooth transition for background and text color */
+            background-color: mintcream;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #212529; /* Default text color for light mode */
+        }
+		.btn_m_l {
+            /* Default/Light Mode */
+            color: #007bff; /* Blue text */
+            background-color: #e9ecef; /* Light gray background */
+            border: 1px solid #007bff; /* Blue border */
+            padding: .375rem .75rem; /* Standard Bootstrap button padding */
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem; /* Standard Bootstrap button border-radius */
+            display: inline-block; /* Ensure it behaves like a block for padding/margin */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .btn_m_l:hover {
+            color: #fff; /* White text on hover */
+            background-color: #007bff; /* Blue background on hover */
+            text-decoration: none; /* Keep underline removed */
+        }
+
+
+#darkModeToggle {
+            transition: all 0.3s ease; /* Smooth transition */
+            /* Default styles for light mode (or when no theme is set) */
+            color: #fff; /* White text */
+            background-color: #6c757d; /* Dark gray background (Bootstrap secondary default) */
+            border-color: #6c757d; /* Matching border */
+        }
+         body.dark-mode .btn_m_l {
+            color: #f8f9fa; /* Light text in dark mode */
+            background-color: #495057; /* Darker gray background */
+            border-color: #6c757d; /* Slightly lighter border for contrast */
+        }
+
+        body.dark-mode .btn_m_l:hover {
+            background-color: #6c757d; /* Even darker on hover */
+            border-color: #495057;
+        }
+
+        body.light-mode #darkModeToggle {
+            color: white; /* Dark text for light mode */
+            background-color:  #6c757d; /* Light background for light mode */
+            border-color: #6c757d; /* Consistent border */
+        }
+
+        body.dark-mode #darkModeToggle {
+            color: #f8f9fa; /* Light text for dark mode */
+            background-color: #343a40; /* Dark background for dark mode */
+            border-color: #444; /* Darker border */
+        }
+
+        #darkModeToggle:hover {
+            opacity: 0.8; /* Slightly dim on hover for both modes */
+        }
+	
+	</style>
+
+</head>
+
+
+
+<body class="pace-done lout_stats30">
+	<main id="content" role="main" class="wyniki wyniki_all">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 page_log_in mt-0">
+					<h2 class="h1" style="text-align: center;">All Links Analytics</h2>
+					<div class="butt_on mx-auto text-center mt-3">
+						<a href="/" class="btn_m_l">Shorten New URL</a>
+						<button id="darkModeToggle" class="btn btn-secondary btn-sm ml-2">Toggle Dark Mode</button>
+					</div>
+				</div>
+
+				{% for obj in rows %}
+				<div class="url_options url_stats_o" id="link-{{ obj.id }}">
+					<p class="data_link"><strong>Created:</strong> {{ obj.created_at|date:"Y-m-d H:i" }} | <strong>Last Click:</strong> {{ obj.last_accessed|date:"Y-m-d H:i" }}</p>
+					<p class="url_link">
+						<strong>Long URL:</strong> {{ obj.long_url }}
+					</p>
+					<p id="short-link-{{ obj.id }}" class="link_element"><strong>
+    Short URL: </strong><a href="/{{ obj.short_url }}" class="short_url_l" target="_blank">
+        {{ obj.short_url }}</a>
+</p>
+					</p>
+					<p><strong>Total Clicks:</strong> {{ obj.clicks }}</p>
+					<p><strong>Latest User Agent:</strong> {{ obj.user_agent|truncatechars:100 }}</p>
+					<!-- <p><strong>Latest Referrer:</strong> {{ obj.referrer|default:"N/A"|truncatechars:100 }}</p>
+					<p><strong>Latest IP Address:</strong> {{ obj.ip_address|default:"N/A" }}</p> -->
+
+					<div class="stats_total btn-center">
+						<a href="{% url 'analytics_detail' short_url=obj.short_url %}" class="btn btn-primary btn-sm">View Detailed Analytics</a>
+						<button class="btn btn-outline-primary btn-sm copy-btn" onclick="copyToClipboard('short-link-{{ obj.id }}')">Copy Short URL</button>
+					</div>
+				</div>
+				{% empty %}
+				<div class="col-12 mt-4 text-center">
+					<p>No shortened URLs yet. Shorten one <a href="/">here</a>!</p>
+				</div>
+				{% endfor %}
+
+				<div class="container" id="alert-box" style="display: none">
+					<div class="row py-4">
+						<div class="col-9"></div>
+						<div class="col-3">
+							<div class="alert alert-success">
+								<strong>Copied to clipboard!</strong>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script type="text/javascript">
+		function copyToClipboard(elementId) {
+			const element = document.getElementById(elementId).querySelector('a'); // Get the anchor tag inside the P
+			const el = document.createElement('textarea');
+			el.value = element.innerText;
+			el.setAttribute('readonly', '');
+			el.style.position = 'absolute';
+			el.style.left = '-9999px';
+			document.body.appendChild(el);
+			const selected =
+				document.getSelection().rangeCount > 0 ?
+				document.getSelection().getRangeAt(0) :
+				false;
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+			if (selected) {
+				document.getSelection().removeAllRanges();
+				document.getSelection().addRange(selected);
+			}
+
+			// Show alert
+			const alertBox = document.getElementById("alert-box");
+			alertBox.style.display = "block";
+			setTimeout(() => {
+				alertBox.style.display = "none";
+			}, 2000); // Hide after 2 seconds
+		}
+
+		// Dark Mode Toggle Logic
+		const darkModeToggle = document.getElementById('darkModeToggle');
+		const body = document.body;
+
+		// Check for saved dark mode preference
+		const currentTheme = localStorage.getItem('theme');
+		if (currentTheme) {
+			body.classList.add(currentTheme);
+		} else {
+			// Default to light mode if no preference is saved
+			body.classList.add('light-mode');
+		}
+
+		darkModeToggle.addEventListener('click', () => {
+			if (body.classList.contains('light-mode')) {
+				body.classList.remove('light-mode');
+				body.classList.add('dark-mode');
+				localStorage.setItem('theme', 'dark-mode');
+			} else {
+				body.classList.remove('dark-mode');
+				body.classList.add('light-mode');
+				localStorage.setItem('theme', 'light-mode');
+			}
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,337 @@
+/* General Body and Container Styles */
+body {
+    font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa; /* Light background */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+main {
+    padding-top: 50px; /* Adjust if your header is fixed */
+    padding-bottom: 50px;
+}
+
+.container {
+    max-width: 960px; /* Keep consistent with Bootstrap MD/LG breakpoint */
+}
+
+/* Header/Hero Section Styles */
+.bg_cuttly_main_092021 {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* More vibrant gradient */
+    color: white;
+    padding: 60px 0;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.bg_cuttly_main_092021 h1,
+.bg_cuttly_main_092021 h2,
+.bg_cuttly_main_092021 h3 {
+    color: white;
+    font-weight: 600;
+}
+
+.h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center; /* Center the main headings */
+}
+
+.h2.h2_index {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    text-align: center; /* Center secondary heading */
+}
+
+/* Button Styles (General Improvements) */
+.btn_m_l {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 10px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid; /* Add border for outline effect */
+}
+
+.btn_m_l_1 {
+    background-color: #fff;
+    color: #2575fc;
+    border-color: #fff;
+}
+
+.btn_m_l_1:hover {
+    background-color: #f0f0f0;
+    color: #1a5bbd;
+}
+
+.btn_m_l { /* Default for other buttons, e.g., All Analytics */
+    background-color: transparent;
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn_m_l:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn-primary.btn-shorten {
+    background-color: #28a745; /* Success green */
+    border-color: #28a745;
+    padding: 10px 30px;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary.btn-shorten:hover {
+    background-color: #218838;
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.copy-btn {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.copy-btn:hover {
+    background-color: #28a745; /* Green hover for success */
+    color: white;
+}
+
+
+/* Form & Input Styles */
+.shorten_block {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: -80px; /* Pull it up into the hero section */
+    position: relative;
+    z-index: 1;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.25);
+}
+
+/* Link Result Box */
+.link-result-box {
+    margin-top: 30px;
+    background-color: #f0fdf4; /* Light green background for success */
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.link-result-box .alert-success {
+    width: 100%;
+    margin-bottom: 15px;
+    border: none;
+    background-color: transparent;
+    color: #155724; /* Dark green text */
+    padding: 0;
+}
+
+.link-result-box .alert-success a {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+}
+.link-result-box .alert-success a:hover {
+    text-decoration: underline;
+}
+
+.link-stats-info {
+    width: 100%;
+    text-align: center;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.link-stats-info p {
+    margin-bottom: 5px;
+}
+
+/* All Analytics and Single Analytics Page Styles */
+.wyniki_all .url_options {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.wyniki_all .url_options p {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.wyniki_all .url_options strong {
+    color: #555;
+    min-width: 120px; /* Align labels */
+    display: inline-block;
+}
+
+.wyniki_all .url_options a.short_url_l {
+    color: #007bff;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.wyniki_all .url_options a.short_url_l:hover {
+    text-decoration: underline;
+}
+
+.wyniki_all .stats_total.btn-center {
+    text-align: center;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.wyniki_all .stats_total .btn {
+    border-radius: 20px;
+}
+
+/* Footer Styles */
+.footer-area {
+    background-color: #343a40; /* Darker footer */
+    color: #ccc;
+    padding: 20px 0;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.footer-area a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer-area a:hover {
+    text-decoration: underline;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #212121; /* Dark background */
+    color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .bg_cuttly_main_092021 {
+    background: linear-gradient(135deg, #001f3f 0%, #004080 100%); /* Darker gradient */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .h1,
+body.dark-mode .h2,
+body.dark-mode .h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .shorten_block,
+body.dark-mode .wyniki_all .url_options {
+    background-color: #2e2e2e; /* Darker card background */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .form-control {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #bbb;
+}
+
+body.dark-mode .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+body.dark-mode .btn_m_l {
+    border-color: #666;
+    color: #e0e0e0;
+}
+body.dark-mode .btn_m_l:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .btn_m_l_1 {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border-color: #4a4a4a;
+}
+body.dark-mode .btn_m_l_1:hover {
+    background-color: #5a5a5a;
+}
+
+body.dark-mode .link-result-box {
+    background-color: #3b4e3c; /* Darker green for success */
+    border-color: #5d7a5e;
+}
+
+body.dark-mode .link-result-box .alert-success {
+    color: #a3e6b7; /* Lighter green text */
+}
+
+body.dark-mode .link-result-box .alert-success a {
+    color: #79bff8; /* Lighter blue link */
+}
+
+body.dark-mode .link-stats-info {
+    color: #bbb;
+}
+
+body.dark-mode .wyniki_all .url_options strong {
+    color: #ccc;
+}
+
+body.dark-mode .wyniki_all .url_options a.short_url_l {
+    color: #79bff8;
+}
+
+body.dark-mode .footer-area {
+    background-color: #1a1a1a;
+    color: #aaa;
+}
+
+body.dark-mode .footer-area a {
+    color: #79bff8;
+}
+
+/* Alert Box Styling (Copied to clipboard) */
+#alert-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050; /* Ensure it's on top */
+}
+
+#alert-box .alert {
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
